@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-cream-pink: #FFB6C1;
+    --color-mist-purple: #B8A1FF;
+    --color-moon-white: #FFFDF9;
+    --color-star-blue: #5B6CFF;
+    --color-warm-gray-50: #FAFAF9;
+    --color-warm-gray-100: #F5F5F4;
+    --color-warm-gray-200: #E7E5E4;
+    --color-warm-gray-300: #D6D3D1;
+    --color-warm-gray-400: #A8A29E;
+    --color-warm-gray-500: #78716C;
+    --color-warm-gray-600: #57534E;
+    --color-warm-gray-700: #44403C;
+    --color-warm-gray-800: #292524;
+    --color-warm-gray-900: #1C1917;
+  }
+
+  * {
+    border-color: var(--color-warm-gray-200);
+  }
+
+  body {
+    @apply bg-moonWhite text-warmGray-800 font-sans antialiased;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-starBlue text-white rounded-2xl px-6 py-3 font-medium
+           transition-all duration-200 hover:opacity-90 active:scale-[0.98]
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply bg-creamPink text-warmGray-800 rounded-2xl px-6 py-3 font-medium
+           transition-all duration-200 hover:opacity-90 active:scale-[0.98]
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .card {
+    @apply bg-white rounded-3xl shadow-soft p-6;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 bg-warmGray-50 border border-warmGray-200 rounded-2xl
+           text-warmGray-800 placeholder-warmGray-400
+           focus:outline-none focus:ring-2 focus:ring-starBlue/20 focus:border-starBlue
+           transition-all duration-200;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-starBlue to-mistPurple bg-clip-text text-transparent;
+  }
+}

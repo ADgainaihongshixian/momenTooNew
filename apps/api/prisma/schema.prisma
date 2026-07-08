@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  password     String
+  nickname     String
+  avatar       String?
+  birthday     DateTime?
+  gender       String?
+  refreshToken String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  coupleId String?
+  couple   Couple? @relation(fields: [coupleId], references: [id])
+
+  moments    Moment[]
+  diaries    Diary[]
+  medias     Media[]
+  sentMessages Message[]
+}
+
+model Couple {
+  id              String       @id @default(cuid())
+  anniversaryDate DateTime
+  relationship    String?
+  inviteCode      String?      @unique
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  users        User[]
+  moments      Moment[]
+  diaries      Diary[]
+  medias       Media[]
+  anniversaries Anniversary[]
+  messages      Message[]
+}
+
+model Moment {
+  id         String       @id @default(cuid())
+  title      String
+  content    String?
+  momentDate DateTime     @default(now())
+  category   String       @default("OTHER")
+  location   String?
+  mood       String?
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  coupleId String
+  couple   Couple @relation(fields: [coupleId], references: [id], onDelete: Cascade)
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
+
+  medias Media[]
+}
+
+model Diary {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  mood      String?
+  weather   String?
+  isPrivate Boolean  @default(false)
+  diaryDate DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  coupleId String
+  couple   Couple @relation(fields: [coupleId], references: [id], onDelete: Cascade)
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
+}
+
+model Anniversary {
+  id          String       @id @default(cuid())
+  title       String
+  date        DateTime
+  repeatType  String       @default("YEARLY")
+  reminder    Int          @default(0)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  coupleId String
+  couple   Couple @relation(fields: [coupleId], references: [id], onDelete: Cascade)
+}
+
+model Media {
+  id        String   @id @default(cuid())
+  url       String
+  type      String
+  filename  String
+  size      Int
+  createdAt DateTime @default(now())
+
+  momentId String?
+  moment   Moment? @relation(fields: [momentId], references: [id], onDelete: SetNull)
+
+  coupleId String
+  couple   Couple @relation(fields: [coupleId], references: [id], onDelete: Cascade)
+
+  uploaderId String
+  uploader   User   @relation(fields: [uploaderId], references: [id])
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  content   String
+  type      String   @default("TEXT")
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  coupleId String
+  couple   Couple @relation(fields: [coupleId], references: [id], onDelete: Cascade)
+
+  senderId String
+  sender   User   @relation(fields: [senderId], references: [id])
+}
